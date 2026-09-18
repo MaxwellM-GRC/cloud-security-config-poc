@@ -68,11 +68,10 @@ cloud and IaC changes ─────┘                         ├─> RCM evi
 4. Reporting writes RCM ready evidence, a findings register, and one stable
    exception case for each failed rule.
 
-Automation may collect evidence, compare settings, recommend a response, and
-route cases. A human must approve remediation or risk acceptance, perform the
-exposure lookback, document root cause, attach closure evidence, and approve
-closure. Automation cannot mutate cloud configuration, approve an exception,
-accept risk, or close a case.
+Automation detects and routes exceptions. Authorized people approve
+remediation, risk acceptance, and closure; they also perform the exposure
+lookback, document root cause, and attach closure evidence. Automation cannot
+mutate cloud configuration, approve an exception, accept risk, or close a case.
 
 ## Quick start
 
