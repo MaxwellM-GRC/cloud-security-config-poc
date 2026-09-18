@@ -98,8 +98,8 @@ lookback, document root cause, attach closure evidence, and approve closure.
 - `ci.yml` tests the evaluator and runs a reproducible sample review on every
   pull request and push.
 - `control-monitor.yml` runs on weekdays or on demand, uploads the evidence,
-  creates or updates a GitHub Issue per finding, labels findings no longer observed
-  cases for human closure review, and then alerts with a failing job when the
+  creates or updates a GitHub Issue per finding, labels findings that are no
+  longer observed for human closure review, and then alerts with a failing job when the
   seeded sample contains findings.
 
 The monitor never closes an Issue automatically. A missing finding can mean
