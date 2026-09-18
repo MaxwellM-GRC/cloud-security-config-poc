@@ -1,0 +1,111 @@
+control:
+  id: ITGC-SCM-001
+  name: Security Configuration Baseline Management
+  source_checklist: SOX_Security_Configuration_Management_Checklist.docx
+  risk_category: security_configuration
+  risk: >-
+    Failure to establish, monitor, and remediate security configuration
+    baselines could weaken safeguards over in scope systems and allow
+    unauthorized access, alteration, or loss of financial data.
+  control_description: >-
+    Management periodically compares actual security configurations for
+    in scope systems to approved baselines and ensures deviations are
+    remediated or supported by current approved exceptions.
+  objective: >-
+    Security configurations remain aligned to approved baselines or
+    documented, approved exceptions.
+  activity: >-
+    Reconcile in scope system inventory to baseline assignments,
+    configuration scan results, approved changes, and exception records.
+  population: >-
+    All in scope cloud accounts, services, hosts, databases, applications,
+    and their approved configuration baselines and exceptions.
+  frequency: Continuous/daily scanning where available; periodic formal review per policy
+  owner: "@MaxwellM-GRC"
+
+review_window:
+  start: "2026-09-01T00:00:00Z"
+  end: "2026-09-17T23:59:59Z"
+  as_of: "2026-09-17"
+
+control_parameters:
+  immediate_escalation_settings:
+    - public_access
+    - public_network_access
+    - ingress_cidr
+    - audit_logging
+    - encryption_enabled
+
+sources:
+  - id: in_scope_inventory
+    kind: inventory
+    path: data/inventory.csv
+    primary_key: resource_id
+    required_columns: [resource_id, provider, account_or_cluster, resource_type, resource_name, financial_scope, baseline_id, owner, inventory_source_ref]
+  - id: approved_baselines
+    kind: baselines
+    path: data/baselines.csv
+    primary_key: requirement_id
+    required_columns: [requirement_id, baseline_id, baseline_version, resource_type, setting, expected_value, comparison, severity, approved_by, approved_at, status]
+  - id: actual_configuration_extracts
+    kind: actual_configurations
+    path: data/actual_configurations.csv
+    primary_key: observation_id
+    required_columns: [observation_id, resource_id, setting, actual_value, observed_at, collector, source_ref]
+  - id: approved_exception_register
+    kind: approved_exceptions
+    path: data/approved_exceptions.csv
+    primary_key: exception_id
+    required_columns: [exception_id, resource_id, setting, requested_by, owner, status, risk_assessment_id, approved_by, approved_at, expires_on, compensating_control, remediation_due_on]
+  - id: security_change_records
+    kind: change_records
+    path: data/change_records.csv
+    primary_key: change_id
+    required_columns: [change_id, resource_id, setting, old_value, new_value, changed_at, actor, approved, change_ticket_id, approved_by, approved_at, source_ref]
+
+rules:
+  SCM-01:
+    severity: high
+    assertion: Every in scope system has an approved baseline assignment.
+  SCM-02:
+    severity: high
+    assertion: Actual configuration settings conform to applicable baseline requirements.
+  SCM-03:
+    severity: high
+    assertion: Deviations have active, risk assessed, approved exceptions or remediation plans.
+  SCM-04:
+    severity: high
+    assertion: Security setting changes trace to approved change management evidence.
+
+rule_responses:
+  SCM-01:
+    remediation: Assign and approve the applicable baseline before relying on the resource for in scope processing.
+    mitigation: Assess the full configuration against the closest approved baseline and review security events since the resource entered scope.
+    root_cause: Determine whether inventory onboarding, ownership, or baseline governance processes failed.
+    closure_evidence: Approved baseline assignment, completed configuration scan, and owner validation.
+    escalation: Escalate when the assignment SLA is breached or immediately if material settings cannot be assessed.
+  SCM-02:
+    remediation: Restore the approved value or submit a time bound exception for independent human approval.
+    mitigation: Assess exposure and review relevant access and security logs for exploitation indicators.
+    root_cause: Determine whether drift arose from a manual change, infrastructure as code defect, deployment, or scanner gap.
+    closure_evidence: Scan after remediation, approved change or exception, risk assessment, and log review conclusion.
+    escalation: Immediate for internet exposure, disabled logging or encryption, or critical identity/security deviations.
+  SCM-03:
+    remediation: Remediate the deviation or obtain a current, risk assessed, time bound exception from an authorized approver.
+    mitigation: Validate compensating controls and review activity for the period without valid approval.
+    root_cause: Determine why exception initiation, approval, ownership, or expiration monitoring failed.
+    closure_evidence: Approved exception or remediation proof, risk assessment, owner, expiration, and compensating control evidence.
+    escalation: Immediate when risk acceptance is expired or missing for a critical deviation.
+  SCM-04:
+    remediation: Have an authorized owner approve rollback, restoration, or formal adoption of the change through the controlled process.
+    mitigation: Review the change delta and related security events from implementation through disposition.
+    root_cause: Determine whether direct cloud access, pipeline controls, emergency process, or ticket integration failed.
+    closure_evidence: Approved change record, configuration before and after the change, reviewer, and impact assessment conclusion.
+    escalation: Immediate for unapproved internet exposure, disabled logging/encryption, or suspected compromise.
+
+automation_boundary:
+  mode: human_approval_required
+  permitted_actions: [collect_evidence, compare_baselines, detect_exceptions, recommend_response, route_cases]
+  prohibited_actions: [mutate_cloud_configuration, approve_exception, accept_risk, close_case]
+  issue_sla_days: 5
+  escalation_owner: "@MaxwellM-GRC"

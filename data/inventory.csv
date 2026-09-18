@@ -1,0 +1,8 @@
+resource_id,provider,account_or_cluster,resource_type,resource_name,financial_scope,baseline_id,owner,inventory_source_ref
+aws-s3-001,AWS,111122223333,aws_s3_bucket,prod-financial-reports,true,aws-s3-v1,finops-platform,aws-config://111122223333/us-west-2/resource/aws-s3-001
+aws-rds-001,AWS,111122223333,aws_rds_instance,prod-ledger-db,true,aws-rds-v1,ledger-platform,aws-config://111122223333/us-west-2/resource/aws-rds-001
+az-st-001,Azure,fin-prod-sub,azure_storage_account,finarchiveprod,true,azure-storage-v1,records-platform,azure-resource-graph://fin-prod-sub/az-st-001
+gcp-bq-001,GCP,fin-reporting-prod,gcp_bigquery_dataset,financial_reporting,true,gcp-bigquery-v1,data-platform,gcp-asset://fin-reporting-prod/gcp-bq-001
+k8s-deploy-001,Kubernetes,prod-finance-cluster,kubernetes_deployment,fin-close-api,true,kubernetes-workload-v1,close-platform,k8s-audit://prod-finance-cluster/apps/deployments/fin-close-api
+tf-net-001,Terraform,fin-network-prod,terraform_network_module,finance-app-network,true,terraform-network-v1,cloud-platform,terraform-cloud://acme/fin-network-prod/state/tf-net-001
+aws-ec2-001,AWS,111122223333,aws_ec2_instance,legacy-close-runner,true,,close-platform,aws-config://111122223333/us-west-2/resource/aws-ec2-001

@@ -1,0 +1,50 @@
+name: Security Configuration Control Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 14 * * 1-5"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: security-configuration-control-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Validate sources and evaluate ITGC-SCM-001
+        run: python -m src.main --run-id "MONITOR-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+      - name: Upload immutable run package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scm-control-evidence-${{ github.run_id }}
+          path: output/
+          if-no-files-found: error
+      - name: Create or update individual exception issues
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/sync_findings.py output/findings.csv output/cases
+      - name: Alert when actionable findings exist
+        if: success()
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          rows = list(csv.DictReader(Path("output/findings.csv").open()))
+          if rows:
+              raise SystemExit(f"ITGC-SCM-001 detected {len(rows)} actionable finding(s); see individual Issues and evidence artifact.")
+          PY

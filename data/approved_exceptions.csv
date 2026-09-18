@@ -1,0 +1,4 @@
+exception_id,resource_id,setting,requested_by,owner,status,risk_assessment_id,approved_by,approved_at,expires_on,compensating_control,remediation_due_on
+EX-001,az-st-001,public_network_access,records-platform,records-platform,approved,RISK-2026-041,security-risk-committee,2026-09-05T17:00:00Z,2026-12-31,IP allowlist and daily access-log review,2026-12-15
+EX-002,gcp-bq-001,audit_logging,data-platform,data-platform,approved,RISK-2026-019,security-risk-committee,2026-05-01T17:00:00Z,2026-08-31,Project-level audit sink retained,2026-08-31
+EX-003,k8s-deploy-001,run_as_non_root,close-platform,close-platform,pending,RISK-2026-055,,,2026-10-15,Read-only filesystem and restricted service account,2026-10-01

@@ -1,0 +1,7 @@
+change_id,resource_id,setting,old_value,new_value,changed_at,actor,approved,change_ticket_id,approved_by,approved_at,source_ref
+CHG-100,aws-s3-001,encryption_enabled,false,true,2026-09-02T19:00:00Z,terraform-prod,true,CHG-2026-100,cloud-change-approver,2026-09-02T18:00:00Z,cloudtrail://CHG-100
+CHG-101,aws-rds-001,public_access,false,true,2026-09-06T20:00:00Z,admin@example.test,false,,,,cloudtrail://CHG-101
+CHG-102,az-st-001,public_network_access,false,true,2026-09-05T18:00:00Z,azure-pipeline,true,CHG-2026-102,cloud-change-approver,2026-09-05T17:30:00Z,azure-activity://CHG-102
+CHG-103,gcp-bq-001,audit_logging,true,false,2026-09-07T21:00:00Z,user:operator@example.test,false,,,,gcp-audit://CHG-103
+CHG-104,k8s-deploy-001,run_as_non_root,true,false,2026-09-10T16:00:00Z,system:serviceaccount:argocd,true,CHG-2026-104,platform-change-approver,2026-09-10T15:00:00Z,k8s-audit://CHG-104
+CHG-105,tf-net-001,ingress_cidr,10.0.0.0/8,0.0.0.0/0,2026-09-12T22:00:00Z,terraform-prod,false,CHG-2026-105,,,terraform-run://CHG-105

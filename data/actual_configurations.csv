@@ -1,0 +1,19 @@
+observation_id,resource_id,setting,actual_value,observed_at,collector,source_ref
+OBS-001,aws-s3-001,encryption_enabled,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-001
+OBS-002,aws-s3-001,public_access_block,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-002
+OBS-003,aws-s3-001,audit_logging,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-003
+OBS-004,aws-rds-001,encryption_enabled,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-004
+OBS-005,aws-rds-001,public_access,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-005
+OBS-006,aws-rds-001,audit_logging,true,2026-09-17T23:45:00Z,AWS Config,aws-config-snapshot://2026-09-17/OBS-006
+OBS-007,az-st-001,secure_transfer_required,true,2026-09-17T23:46:00Z,Azure Policy,azure-policy://2026-09-17/OBS-007
+OBS-008,az-st-001,public_network_access,true,2026-09-17T23:46:00Z,Azure Policy,azure-policy://2026-09-17/OBS-008
+OBS-009,az-st-001,audit_logging,true,2026-09-17T23:46:00Z,Azure Policy,azure-policy://2026-09-17/OBS-009
+OBS-010,gcp-bq-001,default_kms_key,projects/fin-reporting-prod/locations/us/keyRings/fin/cryptoKeys/bq,2026-09-17T23:47:00Z,Security Command Center,gcp-scc://2026-09-17/OBS-010
+OBS-011,gcp-bq-001,public_access,false,2026-09-17T23:47:00Z,Security Command Center,gcp-scc://2026-09-17/OBS-011
+OBS-012,gcp-bq-001,audit_logging,false,2026-09-17T23:47:00Z,Security Command Center,gcp-scc://2026-09-17/OBS-012
+OBS-013,k8s-deploy-001,run_as_non_root,false,2026-09-17T23:48:00Z,Policy Reporter,k8s-policy://2026-09-17/OBS-013
+OBS-014,k8s-deploy-001,privileged,false,2026-09-17T23:48:00Z,Policy Reporter,k8s-policy://2026-09-17/OBS-014
+OBS-015,k8s-deploy-001,image_tag_immutable,true,2026-09-17T23:48:00Z,Policy Reporter,k8s-policy://2026-09-17/OBS-015
+OBS-016,tf-net-001,ingress_cidr,0.0.0.0/0,2026-09-17T23:49:00Z,Terraform Cloud,terraform-plan://2026-09-17/OBS-016
+OBS-017,tf-net-001,flow_logs,true,2026-09-17T23:49:00Z,Terraform Cloud,terraform-plan://2026-09-17/OBS-017
+OBS-018,tf-net-001,encryption_enabled,true,2026-09-17T23:49:00Z,Terraform Cloud,terraform-plan://2026-09-17/OBS-018

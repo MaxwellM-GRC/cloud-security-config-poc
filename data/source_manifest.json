@@ -1,0 +1,56 @@
+{
+  "manifest_version": "1.0",
+  "control_id": "ITGC-SCM-001",
+  "sources": [
+    {
+      "source_id": "in_scope_inventory",
+      "source_uri": "cmdb://query/in-scope-financial-systems",
+      "query": "financial_scope = true AND lifecycle_status = active",
+      "extracted_at": "2026-09-18T00:10:00Z",
+      "window_start": "2026-09-01T00:00:00Z",
+      "window_end": "2026-09-17T23:59:59Z",
+      "row_count": 7,
+      "sha256": "67ef39de9414d22f6a90c180ae6ef485889f38f54a54565564a5401daf420393"
+    },
+    {
+      "source_id": "approved_baselines",
+      "source_uri": "grc://policy/security-configuration-baselines",
+      "query": "status = approved AND effective_at <= review_window_end",
+      "extracted_at": "2026-09-18T00:11:00Z",
+      "window_start": "2026-09-01T00:00:00Z",
+      "window_end": "2026-09-17T23:59:59Z",
+      "row_count": 18,
+      "sha256": "1fcdfd47ce2f9647748fd3e2852cd2dd71764ce26dc5afbd3469b75f16eca566"
+    },
+    {
+      "source_id": "actual_configuration_extracts",
+      "source_uri": "multicloud://aws-config,azure-policy,gcp-scc,kubernetes-policy-reporter,terraform-cloud",
+      "query": "latest configuration state for complete in-scope inventory",
+      "extracted_at": "2026-09-18T00:12:00Z",
+      "window_start": "2026-09-01T00:00:00Z",
+      "window_end": "2026-09-17T23:59:59Z",
+      "row_count": 18,
+      "sha256": "b34f0c9651992694ad7573c26a8c7226e5b2523498fe8f198eb9a7390c6fa411"
+    },
+    {
+      "source_id": "approved_exception_register",
+      "source_uri": "grc://risk/security-configuration-exceptions",
+      "query": "resource in in_scope_inventory AND status in (approved,pending,expired)",
+      "extracted_at": "2026-09-18T00:13:00Z",
+      "window_start": "2026-09-01T00:00:00Z",
+      "window_end": "2026-09-17T23:59:59Z",
+      "row_count": 3,
+      "sha256": "73df89e2f80b7c14e19a180e100a07d14807d8ef40db45dfd7c9a1f966fa75d4"
+    },
+    {
+      "source_id": "security_change_records",
+      "source_uri": "audit-lake://cloud-and-iac/security-setting-changes",
+      "query": "changed_at >= window_start AND changed_at <= window_end AND resource in in_scope_inventory",
+      "extracted_at": "2026-09-18T00:14:00Z",
+      "window_start": "2026-09-01T00:00:00Z",
+      "window_end": "2026-09-17T23:59:59Z",
+      "row_count": 6,
+      "sha256": "237cb63d33eb6d875b31141998b5fe34f4b9e93cb9f55b4bdfada7c15b0f8bc0"
+    }
+  ]
+}
