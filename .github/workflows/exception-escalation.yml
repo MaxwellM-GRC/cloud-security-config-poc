@@ -1,0 +1,21 @@
+name: Security Configuration Exception Escalation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "47 14 * * 1-5"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  escalate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Label exception cases beyond the response SLA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/escalate_cases.py 5

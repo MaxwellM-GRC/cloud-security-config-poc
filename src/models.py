@@ -45,11 +45,16 @@ class Finding:
     detail: str
     evidence_refs: tuple[str, ...]
     exception_id: str
+    case_owner: str
+    response_sla_days: int
     escalation: str
     remediation: str
     mitigation: str
+    lookback: str
     root_cause: str
     closure_evidence: str
+    recurrence: str
+    human_closure_required: bool
 
     @property
     def finding_id(self) -> str:

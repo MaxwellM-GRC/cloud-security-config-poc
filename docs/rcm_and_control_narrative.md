@@ -8,7 +8,7 @@
 | Name | Security Configuration Baseline Management |
 | Risk category | `security_configuration` |
 | Risk | Failure to establish, monitor, and remediate security configuration baselines could weaken safeguards over in scope systems and allow unauthorized access, alteration, or loss of financial data. |
-| Control description | Management periodically compares actual security configurations for in scope systems to approved baselines and ensures deviations are remediated or supported by current approved exceptions. |
+| Control description | Management performs periodic comparisons of actual security configurations for in scope systems to approved baselines and ensures deviations are remediated or supported by current approved exceptions. |
 | Objective | Security configurations remain aligned to approved baselines or documented, approved exceptions. |
 | Frequency | Continuous/daily scanning where available; periodic formal review per policy. |
 | Population | All in scope cloud accounts, services, hosts, databases, applications, and their approved configuration baselines and exceptions. |
@@ -27,9 +27,23 @@
    technical deviation and exception disposition in the evidence.
 5. Reconcile security setting changes during the period to an approved ticket
    whose approval precedes implementation.
-6. Route each finding to an individual case. A human decides on remediation or
-   risk acceptance, performs the lookback, documents root cause and closure
-   evidence, and approves closure.
+6. Route each finding to an individual case. Automation detects and routes;
+   authorized people approve remediation, risk acceptance, and closure. They
+   also perform the lookback, document root cause, and attach closure evidence.
+
+## Exception case lifecycle
+
+Each case records an accountable owner and five day response SLA. The owner
+selects a human approved remediation or risk acceptance path, completes the
+mitigation and exposure lookback, documents root cause, attaches closure
+evidence, and evaluates escalation. A weekday workflow labels overdue open
+cases `sla-breached` for control owner escalation.
+
+The owner also reviews recurrence across the same baseline, resource owner,
+change actor, and delivery path. A finding that is no longer observed receives
+the `human-closure-review` label and remains open until an authorized control
+owner approves closure. If the same stable finding recurs after human closure,
+monitoring opens a new exception case.
 
 ## Linkage between rules and risks
 

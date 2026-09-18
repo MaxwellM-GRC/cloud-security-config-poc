@@ -20,7 +20,8 @@ columns, blank keys, and duplicate keys.
 `control_evidence.json` contains:
 
 - the unchanged control language, objective, frequency, and population;
-- the run ID, UTC generation time, and review window;
+- the deterministic run ID derived from the control, review window, and input
+  digests, plus the UTC generation time;
 - assertions for input validity and population reconciliation;
 - provenance validation for each source;
 - inventory and observation counts;
@@ -30,8 +31,9 @@ columns, blank keys, and duplicate keys.
 
 `findings.csv` contains stable finding IDs, control and rule IDs, severity,
 provider and resource identifiers, affected setting, detail, evidence
-references, related exception, escalation, remediation, mitigation/lookback,
-root cause prompt, and required closure evidence.
+references, related exception, case owner, response SLA, escalation,
+remediation, mitigation, lookback, root cause prompt, required closure
+evidence, recurrence guidance, and the human closure requirement.
 
 One Markdown case is generated per finding. Case generation is deterministic
 for a given control/rule/resource/setting combination, enabling an issue to be

@@ -35,11 +35,11 @@ conformance.
 
 ## What this control tests
 
-| Rule ID | Control assertion | Severity |
+| Control ID | Control description | Severity |
 |---|---|---|
-| SCM-01 | Every in scope system has an applicable approved baseline. | High |
-| SCM-02 | Actual configuration settings conform to the applicable baseline. | High |
-| SCM-03 | Deviations have a current, risk assessed, approved exception or remediation plan. | High |
+| SCM-01 | Every in scope system has an approved baseline assignment. | High |
+| SCM-02 | Actual configuration settings conform to applicable baseline requirements. | High |
+| SCM-03 | Deviations have active, risk assessed, approved exceptions or remediation plans. | High |
 | SCM-04 | Security setting changes trace to approved change management evidence. | High |
 
 Internet exposure and disabled logging or encryption are raised to critical
@@ -114,6 +114,8 @@ output/
 - `control-monitor.yml` runs at 14:17 UTC each weekday or on demand, uploads
   the evidence package, and creates or updates a GitHub Issue for each stable
   finding ID.
+- `exception-escalation.yml` runs each weekday and labels open exception cases
+  that have exceeded the five day response SLA for control owner escalation.
 - The monitor raises an alert when actionable findings exist. Its failing
   status is expected for the deliberately seeded sample exceptions.
 - The response SLA is five days. Immediate escalation applies to internet

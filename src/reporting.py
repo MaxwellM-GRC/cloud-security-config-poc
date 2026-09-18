@@ -14,8 +14,9 @@ from .models import ReviewResult
 FINDING_COLUMNS = [
     "run_id", "finding_id", "control_id", "rule_id", "severity", "provider",
     "resource_id", "resource_name", "setting", "detail", "evidence_refs",
-    "exception_id", "escalation", "remediation", "mitigation", "root_cause",
-    "closure_evidence",
+    "exception_id", "case_owner", "response_sla_days", "escalation",
+    "remediation", "mitigation", "lookback", "root_cause", "closure_evidence",
+    "recurrence", "human_closure_required",
 ]
 
 
@@ -27,6 +28,8 @@ def build_payload(result: ReviewResult, config: dict) -> dict:
         "run_id": result.run_id,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "control": config["control"], "review_window": config["review_window"],
+        "control_rules": config["rules"],
+        "response_guidance": config["rule_responses"],
         "input_valid": result.input_valid,
         "population_reconciled": result.population_reconciled,
         "automation_boundary": config["automation_boundary"],
@@ -73,6 +76,8 @@ def write_outputs(result: ReviewResult, config: dict, output: Path) -> None:
 - **Provider / resource:** {finding.provider} / `{finding.resource_id}` ({finding.resource_name})
 - **Setting:** `{finding.setting}`
 - **Related approved exception record:** `{finding.exception_id or 'none'}`
+- **Case owner:** `{finding.case_owner}`
+- **Response SLA:** {finding.response_sla_days} days
 - **Status:** Open — human decision required
 
 ## Detection
@@ -85,11 +90,13 @@ Evidence references: {', '.join(f'`{item}`' for item in finding.evidence_refs) o
 
 - [ ] Authorized owner approves a remediation or time bound exception decision.
 - [ ] Remediation: {finding.remediation}
-- [ ] Mitigation / lookback: {finding.mitigation}
+- [ ] Mitigation: {finding.mitigation}
+- [ ] Lookback: {finding.lookback}
 - [ ] Root cause: {finding.root_cause}
 - [ ] Closure evidence: {finding.closure_evidence}
 - [ ] Escalation evaluated: {finding.escalation}
-- [ ] Control owner `{config['control']['owner']}` approves closure.
+- [ ] Recurrence review: {finding.recurrence}
+- [ ] Authorized control owner `{finding.case_owner}` approves closure.
 
 Automation may detect, route, and recommend. It must not change production,
 approve an exception, accept risk, or close this case.

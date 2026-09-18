@@ -49,9 +49,13 @@ def _finding(config: dict, rule_id: str, resource: dict, setting: str, detail: s
         provider=resource["provider"], resource_id=resource["resource_id"],
         resource_name=resource["resource_name"], setting=setting, detail=detail,
         evidence_refs=tuple(reference for reference in evidence_refs if reference),
-        exception_id=exception_id, escalation=response["escalation"],
+        exception_id=exception_id, case_owner=config["control"]["owner"],
+        response_sla_days=config["automation_boundary"]["issue_sla_days"],
+        escalation=response["escalation"],
         remediation=response["remediation"], mitigation=response["mitigation"],
-        root_cause=response["root_cause"], closure_evidence=response["closure_evidence"],
+        lookback=response["lookback"], root_cause=response["root_cause"],
+        closure_evidence=response["closure_evidence"],
+        recurrence=response["recurrence"], human_closure_required=True,
     )
 
 

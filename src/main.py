@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+import hashlib
+import json
 from pathlib import Path
 
 from .detection import evaluate
@@ -11,6 +12,24 @@ from .integrity import validate_sources
 from .loaders import load_config, load_evidence
 from .models import ReviewResult
 from .reporting import print_summary, write_outputs
+
+
+def default_run_id(config: dict, source_status: list) -> str:
+    """Build a stable run identifier from scope, window, and retained inputs."""
+    seed = {
+        "control_id": config["control"]["id"],
+        "review_window": config["review_window"],
+        "sources": [
+            {
+                "source_id": source.source_id,
+                "sha256": source.actual_sha256 or source.expected_sha256,
+                "errors": source.errors,
+            }
+            for source in source_status
+        ],
+    }
+    digest = hashlib.sha256(json.dumps(seed, sort_keys=True).encode()).hexdigest()[:16]
+    return f"SCM-{digest}"
 
 
 def parse_args() -> argparse.Namespace:
@@ -29,7 +48,7 @@ def run(config_path: Path, manifest_path: Path, output: Path, run_id: str = "") 
     source_status = validate_sources(config, root, manifest_path.resolve())
     if not source_status or not all(item.ok for item in source_status):
         result = ReviewResult(
-            run_id=run_id or datetime.now(timezone.utc).strftime("SCM-%Y%m%dT%H%M%SZ"),
+            run_id=run_id or default_run_id(config, source_status),
             findings=[], resource_evaluations=[], change_evaluations=[],
             source_status=source_status, inventory_count=0,
             evaluated_resource_count=0, configuration_count=0,
@@ -39,7 +58,7 @@ def run(config_path: Path, manifest_path: Path, output: Path, run_id: str = "") 
     evidence = load_evidence(config, root)
     findings, resources, changes = evaluate(config, evidence)
     result = ReviewResult(
-        run_id=run_id or datetime.now(timezone.utc).strftime("SCM-%Y%m%dT%H%M%SZ"),
+        run_id=run_id or default_run_id(config, source_status),
         findings=findings, resource_evaluations=resources, change_evaluations=changes,
         source_status=source_status, inventory_count=len(evidence["inventory"]),
         evaluated_resource_count=len(resources),

@@ -8,8 +8,8 @@ control:
     baselines could weaken safeguards over in scope systems and allow
     unauthorized access, alteration, or loss of financial data.
   control_description: >-
-    Management periodically compares actual security configurations for
-    in scope systems to approved baselines and ensures deviations are
+    Management performs periodic comparisons of actual security configurations
+    for in scope systems to approved baselines and ensures deviations are
     remediated or supported by current approved exceptions.
   objective: >-
     Security configurations remain aligned to approved baselines or
@@ -65,43 +65,63 @@ sources:
 
 rules:
   SCM-01:
+    control_id: SCM-01
+    control_description: Every in scope system has an approved baseline assignment.
     severity: high
     assertion: Every in scope system has an approved baseline assignment.
+    source_ids: [in_scope_inventory, approved_baselines]
   SCM-02:
+    control_id: SCM-02
+    control_description: Actual configuration settings conform to applicable baseline requirements.
     severity: high
     assertion: Actual configuration settings conform to applicable baseline requirements.
+    source_ids: [in_scope_inventory, approved_baselines, actual_configuration_extracts]
   SCM-03:
+    control_id: SCM-03
+    control_description: Deviations have active, risk assessed, approved exceptions or remediation plans.
     severity: high
     assertion: Deviations have active, risk assessed, approved exceptions or remediation plans.
+    source_ids: [actual_configuration_extracts, approved_exception_register]
   SCM-04:
+    control_id: SCM-04
+    control_description: Security setting changes trace to approved change management evidence.
     severity: high
     assertion: Security setting changes trace to approved change management evidence.
+    source_ids: [in_scope_inventory, security_change_records]
 
 rule_responses:
   SCM-01:
     remediation: Assign and approve the applicable baseline before relying on the resource for in scope processing.
     mitigation: Assess the full configuration against the closest approved baseline and review security events since the resource entered scope.
+    lookback: Review all resources that entered scope during the review period for missing or late baseline assignments.
     root_cause: Determine whether inventory onboarding, ownership, or baseline governance processes failed.
     closure_evidence: Approved baseline assignment, completed configuration scan, and owner validation.
     escalation: Escalate when the assignment SLA is breached or immediately if material settings cannot be assessed.
+    recurrence: Review other newly in scope resources and open systemic corrective action when assignment failures recur.
   SCM-02:
     remediation: Restore the approved value or submit a time bound exception for independent human approval.
     mitigation: Assess exposure and review relevant access and security logs for exploitation indicators.
+    lookback: Review the affected setting and relevant events from the last known conforming state through remediation.
     root_cause: Determine whether drift arose from a manual change, infrastructure as code defect, deployment, or scanner gap.
     closure_evidence: Scan after remediation, approved change or exception, risk assessment, and log review conclusion.
     escalation: Immediate for internet exposure, disabled logging or encryption, or critical identity/security deviations.
+    recurrence: Review the same baseline and owner population for repeat drift and open systemic corrective action when recurring.
   SCM-03:
     remediation: Remediate the deviation or obtain a current, risk assessed, time bound exception from an authorized approver.
     mitigation: Validate compensating controls and review activity for the period without valid approval.
+    lookback: Review the deviation from exception expiration or initial detection through approved disposition.
     root_cause: Determine why exception initiation, approval, ownership, or expiration monitoring failed.
     closure_evidence: Approved exception or remediation proof, risk assessment, owner, expiration, and compensating control evidence.
     escalation: Immediate when risk acceptance is expired or missing for a critical deviation.
+    recurrence: Review the exception owner and register for repeated late approvals or expirations and correct systemic workflow gaps.
   SCM-04:
     remediation: Have an authorized owner approve rollback, restoration, or formal adoption of the change through the controlled process.
     mitigation: Review the change delta and related security events from implementation through disposition.
+    lookback: Review changes by the same actor and delivery path during the review period for additional unauthorized activity.
     root_cause: Determine whether direct cloud access, pipeline controls, emergency process, or ticket integration failed.
     closure_evidence: Approved change record, configuration before and after the change, reviewer, and impact assessment conclusion.
     escalation: Immediate for unapproved internet exposure, disabled logging/encryption, or suspected compromise.
+    recurrence: Restrict the bypass path and open systemic corrective action when unauthorized changes recur.
 
 automation_boundary:
   mode: human_approval_required
